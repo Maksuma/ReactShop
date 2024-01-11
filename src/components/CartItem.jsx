@@ -1,4 +1,4 @@
-export default function CartItem({ title, imgURL, cost }) {
+export default function CartItem({ title, imgURL, cost, removeFromCartItem }) {
 	return (
 		<>
 			<div className='flex items-center border border-slate-200 p-4 gap-4 rounded-xl'>
@@ -12,6 +12,7 @@ export default function CartItem({ title, imgURL, cost }) {
 							className='opacity-40 cursor-pointer transition hover:opacity-100'
 							src='/close.svg'
 							alt='Close'
+							onClick={() => removeFromCartItem()}
 						/>
 					</div>
 				</div>

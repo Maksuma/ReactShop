@@ -14,10 +14,6 @@ export default function Body() {
 	const [searchValue, setSearchValue] = useState('')
 	const [animationParent] = useAutoAnimate()
 
-	const onChangeSelect = e => {
-		setSortBy(e.target.value)
-	}
-
 	const fetchFavorites = async () => {
 		try {
 			const res = await axios.get(
@@ -29,38 +25,70 @@ export default function Body() {
 		}
 	}
 
-	const getFetch = async () => {
+	const onChangeSelect = e => {
+		setSortBy(e.target.value)
+	}
+
+	const addToCartItem = async obj => {
 		try {
-			const params = {
-				sortBy: sortBy,
+			if (cartItems.find(item => item.id === obj.id)) {
+				setCartItems(prev => prev.filter(item => item.id !== obj.id))
+			} else {
+				// const res = await axios.post('/cart', obj)
+				setCartItems(prev => [...prev, obj])
 			}
+		} catch (err) {
+			console.error(err)
+		}
+	}
 
-			if (searchValue) {
-				params.title = `*${searchValue}*`
-			}
-
-			const res = await axios.get(`https://35bd06a011b4a137.mokky.dev/items`, {
-				params,
-			})
-			setData(res.data)
+	const removeFromCartItem = async obj => {
+		try {
+			// const res = await axios.delete('/cart', {
+			// 	params: {
+			// 		id: obj.id,
+			// 	},
+			// })
+			setCartItems(prev => prev.filter(item => item.id !== obj.id))
 		} catch (err) {
 			console.error(err)
 		}
 	}
 
 	useEffect(() => {
+		const getFetch = async () => {
+			try {
+				const params = {
+					sortBy: sortBy,
+				}
+
+				if (searchValue) {
+					params.title = `*${searchValue}*`
+				}
+
+				const res = await axios.get(
+					`https://35bd06a011b4a137.mokky.dev/items`,
+					{
+						params,
+					}
+				)
+				setData(res.data)
+			} catch (err) {
+				console.error(err)
+			}
+		}
 		getFetch()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sortBy, searchValue])
 
-	const addToCartItem = obj => {
-		setCartItems(prev => [...prev, obj])
-	}
-
 	return (
 		<>
 			{cartOpened && (
-				<Drawer cartItems={cartItems} onClose={() => setCartOpened(false)} />
+				<Drawer
+					cartItems={cartItems}
+					onClose={() => setCartOpened(false)}
+					removeFromCartItem={removeFromCartItem}
+				/>
 			)}
 			<div className='bg-white w-4/5 m-auto mt-14 shadow-xl rounded-xl'>
 				<Header onOpen={() => setCartOpened(true)} />
@@ -69,7 +97,11 @@ export default function Body() {
 						<h2 className='text-3xl font-bold mb-8'>Все кроссовки</h2>
 						<div className='flex gap-4'>
 							<div className='relative items-center'>
-								<img src='/search.svg' className='absolute left-4 top-3' />
+								<img
+									src='/search.svg'
+									alt='search'
+									className='absolute left-4 top-3'
+								/>
 								<input
 									value={searchValue}
 									type='text'
@@ -80,6 +112,7 @@ export default function Body() {
 								{searchValue && (
 									<img
 										src='/close.svg'
+										alt='Close'
 										className='absolute top-[5px] right-2'
 										onClick={() => setSearchValue('')}
 									/>
@@ -96,6 +129,7 @@ export default function Body() {
 						</div>
 					</div>
 					<CardList
+						cartItems={cartItems}
 						animationParent={animationParent}
 						addToCartItem={addToCartItem}
 						items={data}

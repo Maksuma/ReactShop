@@ -1,6 +1,6 @@
 import CartItem from './CartItem'
 
-export default function CartItemList({ cartItems }) {
+export default function CartItemList({ cartItems, removeFromCartItem }) {
 	return (
 		<>
 			<div className='flex flex-1 flex-col gap-5 overflow-auto'>
@@ -11,6 +11,7 @@ export default function CartItemList({ cartItems }) {
 							title={item.title}
 							imgURL={item.imageUrl}
 							cost={item.price}
+							removeFromCartItem={() => removeFromCartItem(item)}
 						/>
 					)
 				})}
