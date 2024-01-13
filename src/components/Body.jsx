@@ -9,21 +9,51 @@ import Header from './Header'
 export default function Body() {
 	const [data, setData] = useState([])
 	const [cartItems, setCartItems] = useState([])
+	const [favorites, setFavorites] = useState([])
 	const [cartOpened, setCartOpened] = useState(false)
 	const [sortBy, setSortBy] = useState('title')
 	const [searchValue, setSearchValue] = useState('')
+	const [isLoading, setIsLoading] = useState(true)
 	const [animationParent] = useAutoAnimate()
+	const Api = 'https://35bd06a011b4a137.mokky.dev'
 
-	const fetchFavorites = async () => {
-		try {
-			const res = await axios.get(
-				'https://35bd06a011b4a137.mokky.dev/Favorites'
-			)
-			setData(res.data)
-		} catch (err) {
-			console.error(err)
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const itemsData = await axios.get(`${Api}/items`)
+				const cartData = await axios.get(`${Api}/cart`)
+				const favoriteData = await axios.get(`${Api}/favorites`)
+				setCartItems(cartData.data)
+				setFavorites(favoriteData.data)
+				setData(itemsData.data)
+				setIsLoading(false)
+			} catch (err) {
+				console.error(err)
+			}
 		}
-	}
+		fetchData()
+	}, [])
+
+	useEffect(() => {
+		const filterFetchData = async () => {
+			try {
+				setIsLoading(true)
+				const params = {
+					sortBy: sortBy,
+				}
+
+				if (searchValue) {
+					params.title = `*${searchValue}*`
+				}
+				const itemsData = await axios.get(`${Api}/items`, { params })
+				setData(itemsData.data)
+				setIsLoading(false)
+			} catch (err) {
+				console.error(err)
+			}
+		}
+		filterFetchData()
+	}, [sortBy, searchValue])
 
 	const onChangeSelect = e => {
 		setSortBy(e.target.value)
@@ -54,32 +84,6 @@ export default function Body() {
 			console.error(err)
 		}
 	}
-
-	useEffect(() => {
-		const getFetch = async () => {
-			try {
-				const params = {
-					sortBy: sortBy,
-				}
-
-				if (searchValue) {
-					params.title = `*${searchValue}*`
-				}
-
-				const res = await axios.get(
-					`https://35bd06a011b4a137.mokky.dev/items`,
-					{
-						params,
-					}
-				)
-				setData(res.data)
-			} catch (err) {
-				console.error(err)
-			}
-		}
-		getFetch()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [sortBy, searchValue])
 
 	return (
 		<>
@@ -129,6 +133,7 @@ export default function Body() {
 						</div>
 					</div>
 					<CardList
+						isLoading={isLoading}
 						cartItems={cartItems}
 						animationParent={animationParent}
 						addToCartItem={addToCartItem}
