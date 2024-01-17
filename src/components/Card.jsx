@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { AppContext } from '../App'
 
-export default function Card({ id, title, imageUrl, price, onPlus }) {
+export default function Card({ title, imageUrl, price, onPlus, isAdded }) {
+	const state = useContext(AppContext)
 	const [isFavorite, setIsFavorite] = useState(false)
-	const [isAdded, setIsAdded] = useState(false)
-
 	return (
 		<>
 			<div className='relative bg-white border border-slate-100 rounded-3xl p-8 transition hover:-translate-y-2 hover:shadow-xl'>
@@ -24,10 +24,9 @@ export default function Card({ id, title, imageUrl, price, onPlus }) {
 					</div>
 					<img
 						src={isAdded ? '/checked.svg' : '/plus.svg'}
-						alt='Add'
+						alt='Add or remove'
 						onClick={() => {
-							onPlus({ id, title, price, imageUrl })
-							setIsAdded(!isAdded)
+							onPlus()
 						}}
 					/>
 				</div>

@@ -1,4 +1,8 @@
+import { useContext } from 'react'
+import { AppContext } from '../App'
+
 export default function CartItem({ title, imgURL, cost, removeFromCartItem }) {
+	const state = useContext(AppContext)
 	return (
 		<>
 			<div className='flex items-center border border-slate-200 p-4 gap-4 rounded-xl'>
@@ -12,7 +16,9 @@ export default function CartItem({ title, imgURL, cost, removeFromCartItem }) {
 							className='opacity-40 cursor-pointer transition hover:opacity-100'
 							src='/close.svg'
 							alt='Close'
-							onClick={() => removeFromCartItem()}
+							onClick={() => {
+								removeFromCartItem()
+							}}
 						/>
 					</div>
 				</div>

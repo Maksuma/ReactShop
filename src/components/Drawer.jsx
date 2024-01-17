@@ -1,7 +1,7 @@
 import BackButton from './BackButton'
 import CartItemList from './CartItemList'
 
-export default function Drawer({ onClose, cartItems, removeFromCartItem }) {
+export default function Drawer({ onClose, removeFromCartItem }) {
 	return (
 		<>
 			<div className='fixed top-0 left-0 h-full w-full bg-black z-10 opacity-70'></div>
@@ -11,10 +11,7 @@ export default function Drawer({ onClose, cartItems, removeFromCartItem }) {
 					<h2 className='font-bold text-2xl'>Корзина</h2>
 				</div>
 
-				<CartItemList
-					removeFromCartItem={removeFromCartItem}
-					cartItems={cartItems}
-				/>
+				<CartItemList removeFromCartItem={removeFromCartItem} />
 
 				<div className='flex flex-col gap-4 mt-7'>
 					<div className='flex justify-between items-center gap-2'>

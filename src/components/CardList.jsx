@@ -1,22 +1,22 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
+import { useContext } from 'react'
+import { AppContext } from '../App'
 import Card from './Card'
 import CardSkeleton from './CardSkeleton'
 
-export default function CardList({
-	items,
-	addToCartItem,
-	animationParent,
-	cartItems,
-	isLoading,
-}) {
+export default function CardList() {
+	const state = useContext(AppContext)
 	return (
 		<>
-			<div className='grid grid-cols-4 gap-5 mt-10' ref={animationParent}>
-				{isLoading
-					? [...Array(10)].map(index => {
+			<div
+				className='grid grid-cols-2 lg:grid-cols-4 gap-5 mt-10 '
+				ref={state.animationParent}
+			>
+				{state.isLoading || state.data === undefined
+					? [...Array(12)].map((obj, index) => {
 							return <CardSkeleton key={index} />
 					  })
-					: items.map((item, index) => {
+					: state.data.map((item, index) => {
 							return (
 								<Card
 									key={index}
@@ -24,9 +24,15 @@ export default function CardList({
 									title={item.title}
 									imageUrl={item.imageUrl}
 									price={item.price}
-									added={cartItems.includes(item.id)}
-									onPlus={obj => {
-										addToCartItem(obj)
+									isAdded={state.isItemAdded(item.id)}
+									onPlus={() => {
+										console.log('item', item)
+										state.addToCartItem({
+											id: item.id,
+											title: item.title,
+											imageUrl: item.imageUrl,
+											price: item.price,
+										})
 									}}
 								/>
 							)
