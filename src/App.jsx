@@ -10,7 +10,7 @@ export default function App() {
 	const [cartItems, setCartItems] = useState([])
 	const [favorites, setFavorites] = useState([])
 	const [cartOpened, setCartOpened] = useState(false)
-	const [sortBy, setSortBy] = useState('title')
+	const [sortBy, setSortBy] = useState('name')
 	const [searchValue, setSearchValue] = useState('')
 	const [isLoading, setIsLoading] = useState(true)
 	const [animationParent] = useAutoAnimate()
@@ -22,8 +22,6 @@ export default function App() {
 				const itemsData = await axios.get(`${Api}/items`)
 				const cartData = await axios.get(`${Api}/cart`)
 				const favoriteData = await axios.get(`${Api}/favorites`)
-				console.log(itemsData.data)
-				console.log('cartdata', cartData.data)
 				setCartItems(cartData.data)
 				setFavorites(favoriteData.data)
 				setData(itemsData.data)
@@ -66,25 +64,37 @@ export default function App() {
 
 	const addToCartItem = async obj => {
 		try {
-			await axios.post(`${Api}/cart`, obj)
-			setCartItems(prev => [...prev, obj])
+			const params = {
+				card_id: obj.id,
+			}
+			await axios.post(`${Api}/cart`, {
+				card_id: obj.id,
+				title: obj.title,
+				imageUrl: obj.imageUrl,
+				price: obj.price,
+			})
+			const serverObj = (await axios.get(`${Api}/cart`, { params })).data[0]
+			console.log('serverObj', serverObj)
+			setCartItems(prev => [...prev, serverObj])
 		} catch (err) {
 			console.error(err)
 		}
 	}
 
 	const isItemAdded = id => {
-		return cartItems.some(item => item.id === id)
+		return cartItems.some(item => item.card_id === id)
 	}
 
 	const removeFromCartItem = async obj => {
 		try {
-			setCartItems(prev => prev.filter(item => item.id !== obj.id))
+			console.log(obj)
 			await axios.delete(`${Api}/cart/${obj.id}`)
+			setCartItems(prev => prev.filter(item => item.id !== obj.id))
 		} catch (err) {
 			console.error(err)
 		}
 	}
+
 	return (
 		<AppContext.Provider
 			value={{

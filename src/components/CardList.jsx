@@ -27,12 +27,7 @@ export default function CardList() {
 									isAdded={state.isItemAdded(item.id)}
 									onPlus={() => {
 										console.log('item', item)
-										state.addToCartItem({
-											id: item.id,
-											title: item.title,
-											imageUrl: item.imageUrl,
-											price: item.price,
-										})
+										state.addToCartItem(item)
 									}}
 								/>
 							)
