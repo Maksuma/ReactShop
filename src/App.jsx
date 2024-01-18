@@ -1,8 +1,10 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import axios from 'axios'
 import { createContext, useEffect, useState } from 'react'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Body from './components/Body'
 import Drawer from './components/Drawer'
+import Favorites from './components/Favorites'
 import Header from './components/Header'
 export const AppContext = createContext({})
 export default function App() {
@@ -13,6 +15,7 @@ export default function App() {
 	const [sortBy, setSortBy] = useState('name')
 	const [searchValue, setSearchValue] = useState('')
 	const [isLoading, setIsLoading] = useState(true)
+	const [totalPrice, setTotalPrice] = useState(0)
 	const [animationParent] = useAutoAnimate()
 	const Api = 'https://35bd06a011b4a137.mokky.dev'
 
@@ -80,6 +83,10 @@ export default function App() {
 		return cartItems.some(item => item.card_id === id)
 	}
 
+	const isItemFavorite = id => {
+		return favorites.some(item => item.favorite_id === id)
+	}
+
 	const removeFromCartItem = async obj => {
 		try {
 			await axios.delete(`${Api}/cart/${obj.id}`)
@@ -99,6 +106,73 @@ export default function App() {
 		}
 	}
 
+	const addFavorite = async obj => {
+		try {
+			const params = {
+				favorite_id: obj.id,
+			}
+
+			await axios.post(`${Api}/favorites`, {
+				favorite_id: obj.id,
+				title: obj.title,
+				imageUrl: obj.imageUrl,
+				price: obj.price,
+			})
+			const serverObj = (await axios.get(`${Api}/favorites`, { params }))
+				.data[0]
+			setFavorites(prev => [...prev, serverObj])
+		} catch (err) {
+			console.error(err)
+		}
+	}
+
+	const removeFavorite = async obj => {
+		try {
+			const idInFavorites = favorites.find(item => item.favorite_id === obj.id)
+			await axios.delete(`${Api}/favorites/${idInFavorites.id}`)
+			setFavorites(prev => prev.filter(item => item.favorite_id !== obj.id))
+		} catch (err) {
+			console.error(err)
+		}
+	}
+
+	const router = createBrowserRouter([
+		{
+			path: '/',
+			element: (
+				<>
+					{cartOpened && (
+						<Drawer
+							onClose={() => setCartOpened(false)}
+							removeFromCartItem={removeFromCartItem}
+						/>
+					)}
+					<div className='bg-white w-4/5 m-auto mt-14 shadow-xl rounded-xl'>
+						<Header onOpen={() => setCartOpened(true)} />
+						<Body />
+					</div>
+				</>
+			),
+		},
+		{
+			path: '/favorites',
+			element: (
+				<>
+					{cartOpened && (
+						<Drawer
+							onClose={() => setCartOpened(false)}
+							removeFromCartItem={removeFromCartItem}
+						/>
+					)}
+					<div className='bg-white w-4/5 m-auto mt-14 shadow-xl rounded-xl'>
+						<Header onOpen={() => setCartOpened(true)} />
+						<Favorites />
+					</div>
+				</>
+			),
+		},
+	])
+
 	return (
 		<AppContext.Provider
 			value={{
@@ -110,23 +184,19 @@ export default function App() {
 				data,
 				favorites,
 				setFavorites,
+				addFavorite,
+				removeFavorite,
+				isItemFavorite,
 				onChangeSelect,
 				isLoading,
 				animationParent,
 				searchValue,
 				setSearchValue,
+				totalPrice,
+				setTotalPrice,
 			}}
 		>
-			{cartOpened && (
-				<Drawer
-					onClose={() => setCartOpened(false)}
-					removeFromCartItem={removeFromCartItem}
-				/>
-			)}
-			<div className='bg-white w-4/5 m-auto mt-14 shadow-xl rounded-xl'>
-				<Header onOpen={() => setCartOpened(true)} />
-				<Body />
-			</div>
+			<RouterProvider router={router} />
 		</AppContext.Provider>
 	)
 }

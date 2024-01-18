@@ -1,16 +1,14 @@
-import { useContext, useState } from 'react'
-import { AppContext } from '../App'
-
 export default function Card({
 	title,
 	imageUrl,
 	price,
 	isAdded,
+	isFavorite,
 	addToCart,
 	removeFromCart,
+	addToFavorite,
+	removeFromFavorite,
 }) {
-	const state = useContext(AppContext)
-	const [isFavorite, setIsFavorite] = useState(false)
 	return (
 		<>
 			<div className='relative bg-white border border-slate-100 rounded-3xl p-8 transition hover:-translate-y-2 hover:shadow-xl'>
@@ -19,7 +17,13 @@ export default function Card({
 					src={isFavorite ? '/like-2.svg' : '/like-1.svg'}
 					alt='Like'
 					onClick={() => {
-						setIsFavorite(!isFavorite)
+						if (isFavorite) {
+							isFavorite = false
+							removeFromFavorite()
+						} else {
+							isFavorite = true
+							addToFavorite()
+						}
 					}}
 				/>
 				<img src={imageUrl} alt='sneaker' />

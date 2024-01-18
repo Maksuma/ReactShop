@@ -25,6 +25,13 @@ export default function CardList() {
 									imageUrl={item.imageUrl}
 									price={item.price}
 									isAdded={state.isItemAdded(item.id)}
+									isFavorite={state.isItemFavorite(item.id)}
+									addToFavorite={() => {
+										state.addFavorite(item)
+									}}
+									removeFromFavorite={() => {
+										state.removeFavorite(item)
+									}}
 									addToCart={() => {
 										state.addToCartItem(item)
 									}}
