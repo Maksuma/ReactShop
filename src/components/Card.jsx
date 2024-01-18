@@ -1,7 +1,14 @@
 import { useContext, useState } from 'react'
 import { AppContext } from '../App'
 
-export default function Card({ title, imageUrl, price, onPlus, isAdded }) {
+export default function Card({
+	title,
+	imageUrl,
+	price,
+	isAdded,
+	addToCart,
+	removeFromCart,
+}) {
 	const state = useContext(AppContext)
 	const [isFavorite, setIsFavorite] = useState(false)
 	return (
@@ -26,7 +33,13 @@ export default function Card({ title, imageUrl, price, onPlus, isAdded }) {
 						src={isAdded ? '/checked.svg' : '/plus.svg'}
 						alt='Add or remove'
 						onClick={() => {
-							onPlus()
+							if (isAdded) {
+								removeFromCart()
+								isAdded = false
+							} else {
+								addToCart()
+								isAdded = true
+							}
 						}}
 					/>
 				</div>

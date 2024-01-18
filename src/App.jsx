@@ -34,10 +34,6 @@ export default function App() {
 	}, [])
 
 	useEffect(() => {
-		console.log('cartItems', cartItems)
-	}, [cartItems])
-
-	useEffect(() => {
 		const filterFetchData = async () => {
 			try {
 				setIsLoading(true)
@@ -74,7 +70,6 @@ export default function App() {
 				price: obj.price,
 			})
 			const serverObj = (await axios.get(`${Api}/cart`, { params })).data[0]
-			console.log('serverObj', serverObj)
 			setCartItems(prev => [...prev, serverObj])
 		} catch (err) {
 			console.error(err)
@@ -87,9 +82,18 @@ export default function App() {
 
 	const removeFromCartItem = async obj => {
 		try {
-			console.log(obj)
 			await axios.delete(`${Api}/cart/${obj.id}`)
 			setCartItems(prev => prev.filter(item => item.id !== obj.id))
+		} catch (err) {
+			console.error(err)
+		}
+	}
+
+	const removeFromCardsList = async obj => {
+		try {
+			const idInCart = cartItems.find(item => item.card_id === obj.id)
+			await axios.delete(`${Api}/cart/${idInCart.id}`)
+			setCartItems(prev => prev.filter(item => item.card_id !== obj.id))
 		} catch (err) {
 			console.error(err)
 		}
@@ -102,6 +106,7 @@ export default function App() {
 				cartItems,
 				addToCartItem,
 				removeFromCartItem,
+				removeFromCardsList,
 				data,
 				favorites,
 				setFavorites,
