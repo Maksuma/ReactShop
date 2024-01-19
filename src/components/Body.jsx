@@ -7,9 +7,9 @@ export default function Body() {
 	return (
 		<>
 			<div className='p-10'>
-				<div className='flex justify-between items-center'>
-					<h2 className='text-3xl font-bold mb-8'>Все кроссовки</h2>
-					<div className='flex gap-4'>
+				<div className='flex flex-col flex-wrap lg:flex-row justify-between items-center mb-8'>
+					<h2 className='text-3xl font-bold mb-8 lg:mb-0'>Все кроссовки</h2>
+					<div className='flex flex-wrap flex-col md:flex-row gap-4'>
 						<div className='relative items-center'>
 							<img
 								src='/search.svg'

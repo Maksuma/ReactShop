@@ -8,8 +8,15 @@ export default function CardList() {
 	const state = useContext(AppContext)
 	return (
 		<>
+			{!state.isLoading && state.data.length === 0 && (
+				<>
+					<h1 className='flex justify-center font-bold text-2xl text-center'>
+						Таких кроссовок нет :(
+					</h1>
+				</>
+			)}
 			<div
-				className='grid grid-cols-2 lg:grid-cols-4 gap-5 mt-10 '
+				className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-10 '
 				ref={state.animationParent}
 			>
 				{state.isLoading || state.data === undefined

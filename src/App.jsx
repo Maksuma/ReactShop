@@ -28,6 +28,11 @@ export default function App() {
 				setCartItems(cartData.data)
 				setFavorites(favoriteData.data)
 				setData(itemsData.data)
+				setTotalPrice(
+					cartData.data.reduce((acc, item) => {
+						return acc + item.price
+					}, 0)
+				)
 				setIsLoading(false)
 			} catch (err) {
 				console.error(err)
@@ -74,6 +79,7 @@ export default function App() {
 			})
 			const serverObj = (await axios.get(`${Api}/cart`, { params })).data[0]
 			setCartItems(prev => [...prev, serverObj])
+			setTotalPrice(prev => prev + obj.price)
 		} catch (err) {
 			console.error(err)
 		}
@@ -91,6 +97,7 @@ export default function App() {
 		try {
 			await axios.delete(`${Api}/cart/${obj.id}`)
 			setCartItems(prev => prev.filter(item => item.id !== obj.id))
+			setTotalPrice(prev => prev - obj.price)
 		} catch (err) {
 			console.error(err)
 		}
@@ -101,6 +108,7 @@ export default function App() {
 			const idInCart = cartItems.find(item => item.card_id === obj.id)
 			await axios.delete(`${Api}/cart/${idInCart.id}`)
 			setCartItems(prev => prev.filter(item => item.card_id !== obj.id))
+			setTotalPrice(prev => prev - obj.price)
 		} catch (err) {
 			console.error(err)
 		}

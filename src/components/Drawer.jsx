@@ -42,7 +42,7 @@ export default function Drawer({ onClose, removeFromCartItem }) {
 						<div className='flex flex-col gap-4 mt-7'>
 							<div className='flex justify-between items-center gap-2'>
 								<span>Итого:</span>
-								<b>12990 руб.</b>
+								<b>{state.totalPrice} руб.</b>
 							</div>
 							<button className='w-full py-3 rounded-xl bg-lime-400 text-white disabled:bg-slate-300 hover:bg-lime-300 active:bg-lime-500 transition'>
 								Оформить заказ

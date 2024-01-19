@@ -11,9 +11,9 @@ export default function Card({
 }) {
 	return (
 		<>
-			<div className='relative bg-white border border-slate-100 rounded-3xl p-8 transition hover:-translate-y-2 hover:shadow-xl'>
+			<div className='flex flex-col justify-between relative bg-white border border-slate-100 rounded-3xl p-8 transition hover:-translate-y-2 hover:shadow-xl'>
 				<img
-					className='absolute top-8 left-8'
+					className='absolute top-8 left-8 cursor-pointer'
 					src={isFavorite ? '/like-2.svg' : '/like-1.svg'}
 					alt='Like'
 					onClick={() => {
@@ -34,6 +34,7 @@ export default function Card({
 						<b>{price} руб.</b>
 					</div>
 					<img
+						className='cursor-pointer'
 						src={isAdded ? '/checked.svg' : '/plus.svg'}
 						alt='Add or remove'
 						onClick={() => {
