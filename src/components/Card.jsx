@@ -8,10 +8,14 @@ export default function Card({
 	removeFromCart,
 	addToFavorite,
 	removeFromFavorite,
+	id,
 }) {
 	return (
 		<>
-			<div className='flex flex-col justify-between relative bg-white border border-slate-100 rounded-3xl p-8 transition hover:-translate-y-2 hover:shadow-xl'>
+			<div
+				className='flex flex-col justify-between relative bg-white border border-slate-100 rounded-3xl p-8 transition hover:-translate-y-2 hover:shadow-xl'
+				id={id}
+			>
 				<img
 					className='absolute top-8 left-8 cursor-pointer'
 					src={isFavorite ? '/like-2.svg' : '/like-1.svg'}
@@ -39,11 +43,11 @@ export default function Card({
 						alt='Add or remove'
 						onClick={() => {
 							if (isAdded) {
-								removeFromCart()
 								isAdded = false
+								removeFromCart()
 							} else {
-								addToCart()
 								isAdded = true
+								addToCart()
 							}
 						}}
 					/>

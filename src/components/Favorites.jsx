@@ -27,15 +27,12 @@ export default function Favorites() {
 								return (
 									<Card
 										key={index}
-										id={item.id}
+										id={item.favorite_id}
 										title={item.title}
 										imageUrl={item.imageUrl}
 										price={item.price}
 										isAdded={state.isItemAdded(item.id)}
-										isFavorite={state.isItemFavorite(item.id)}
-										addToFavorite={() => {
-											state.addFavorite(item)
-										}}
+										isFavorite={state.isItemFavorite(item.favorite_id)}
 										removeFromFavorite={() => {
 											state.removeFavorite(item)
 										}}

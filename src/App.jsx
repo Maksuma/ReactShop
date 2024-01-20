@@ -136,9 +136,13 @@ export default function App() {
 
 	const removeFavorite = async obj => {
 		try {
-			const idInFavorites = favorites.find(item => item.favorite_id === obj.id)
+			const idInFavorites = favorites.find(
+				item => item.favorite_id === obj.favorite_id
+			)
 			await axios.delete(`${Api}/favorites/${idInFavorites.id}`)
-			setFavorites(prev => prev.filter(item => item.favorite_id !== obj.id))
+			setFavorites(prev =>
+				prev.filter(item => item.favorite_id !== obj.favorite_id)
+			)
 		} catch (err) {
 			console.error(err)
 		}
