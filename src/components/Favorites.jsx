@@ -7,14 +7,14 @@ export default function Favorites() {
 	const state = useContext(AppContext)
 	return (
 		<div className='p-10'>
+			{!state.isLoading && state.favorites.length === 0 && (
+				<>
+					<h1 className='flex justify-center font-bold text-2xl text-center'>
+						У вас нет закладок :(
+					</h1>
+				</>
+			)}
 			<div className='flex flex-col flex-wrap lg:flex-row justify-between items-center mb-8'>
-				{!state.isLoading && state.favorites.length === 0 && (
-					<>
-						<h1 className='flex justify-center font-bold text-2xl text-center'>
-							Таких кроссовок нет :(
-						</h1>
-					</>
-				)}
 				<div
 					className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-10 '
 					ref={state.animationParent}

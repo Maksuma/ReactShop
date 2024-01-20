@@ -155,7 +155,7 @@ export default function App() {
 							removeFromCartItem={removeFromCartItem}
 						/>
 					)}
-					<div className='bg-white w-4/5 m-auto mt-14 shadow-xl rounded-xl'>
+					<div className='bg-white m-auto mt-14'>
 						<Header onOpen={() => setCartOpened(true)} />
 						<Body />
 					</div>
@@ -172,7 +172,7 @@ export default function App() {
 							removeFromCartItem={removeFromCartItem}
 						/>
 					)}
-					<div className='bg-white w-4/5 m-auto mt-14 shadow-xl rounded-xl'>
+					<div className='bg-white m-auto mt-14'>
 						<Header onOpen={() => setCartOpened(true)} />
 						<Favorites />
 					</div>
